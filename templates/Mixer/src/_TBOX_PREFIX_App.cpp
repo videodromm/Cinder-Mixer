@@ -84,13 +84,11 @@ _TBOX_PREFIX_App::_TBOX_PREFIX_App()
 	//mVDSettings->mCursorVisible = true;
 	setUIVisibility(mVDSettings->mCursorVisible);
 	mVDSession->getWindowsResolution();
-	mVDUI = VDUI::create(mVDSettings, mVDSession);
 
 	mouseGlobal = false;
 	mFadeInDelay = true;
 	// windows
 	mIsShutDown = false;
-	mIsResizing = true;
 	mRenderWindowTimer = 0.0f;
 	timeline().apply(&mRenderWindowTimer, 1.0f, 2.0f).finishFn([&] { positionRenderWindow(); });
 
@@ -123,10 +121,10 @@ void _TBOX_PREFIX_App::update()
 	mReceiver.update();
 
 	// Spout Receive
-	if (mSpoutIn.getSize() != app::getWindowSize()) {
+	/* if (mSpoutIn.getSize() != app::getWindowSize()) {
 		app::setWindowSize(mSpoutIn.getSize());
 		mTexture = ci::gl::Texture::create(getWindowWidth(), getWindowHeight(), ci::gl::Texture::Format().loadTopDown(true));
-	}
+	} */
 
 	mTexture = mSpoutIn.receiveTexture();
 	// Ndi Send
@@ -146,8 +144,6 @@ void _TBOX_PREFIX_App::cleanup()
 	{
 		mIsShutDown = true;
 		CI_LOG_V("shutdown");
-		ui::disconnectWindow(getWindow());
-		ui::Shutdown();
 		// save settings
 		mVDSettings->save();
 		mVDSession->save();

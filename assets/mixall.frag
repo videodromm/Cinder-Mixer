@@ -3,8 +3,12 @@
 uniform vec3        iResolution;         	// viewport resolution (in pixels)
 uniform float       iChannelTime[4];     	// channel playback time (in seconds)
 uniform vec3        iChannelResolution[4];	// channel resolution (in pixels)
-uniform sampler2D   iChannel0;				// input channel 0 (TODO: support samplerCube)
+uniform sampler2D   iChannel0;				// input channel 0 
 uniform sampler2D   iChannel1;				// input channel 1 
+uniform sampler2D   iChannel2;				// input channel 1 
+uniform float       iWeight0;         	// weight of channel 0
+uniform float       iWeight1;         	// weight of channel 1
+uniform float       iWeight2;         	// weight of channel 2
 uniform sampler2D   iAudio0;				// input channel 0 (audio)
 uniform vec4        iMouse;              	// mouse pixel coords. xy: current (if MLB down), zw: click
 uniform float       iGlobalTime;         	// shader playback time (in seconds)
@@ -306,32 +310,58 @@ vec3 shaderLeft(vec2 uv)
 }
 // left main lines end
 
-// right main lines begin
-vec3 shaderRight(vec2 uv)
+// middle main lines begin
+vec3 shaderMiddle(vec2 uv)
 {
-	vec4 right = texture2D(iChannel1, uv);
+	vec4 middle = texture2D(iChannel1, uv);
 	// chromatic aberation
 	if (iChromatic > 0.0) 
 	{
 		vec2 offset = vec2(iChromatic/50.,.0);
-		right.r = texture2D(iChannel1, uv+offset.xy).r;
-		right.g = texture2D(iChannel1, uv          ).g;
-		right.b = texture2D(iChannel1, uv+offset.yx).b;
+		middle.r = texture2D(iChannel1, uv+offset.xy).r;
+		middle.g = texture2D(iChannel1, uv          ).g;
+		middle.b = texture2D(iChannel1, uv+offset.yx).b;
 	}
 	// Trixels
 	if (iTrixels > 0.0) 
 	{
-      	right = trixels( uv, iChannel1 );
+      	middle = trixels( uv, iChannel1 );
 	}
   	// Grid
   	if (iGridSize > 0.0) 
   	{
-        right = grid( uv, iChannel1 );
+        middle = grid( uv, iChannel1 );
+  	}
+
+	return vec3( middle.r, middle.g, middle.b );
+}
+// middle main lines end
+
+// right main lines begin
+vec3 shaderRight(vec2 uv)
+{
+	vec4 right = texture2D(iChannel2, uv);
+	// chromatic aberation
+	if (iChromatic > 0.0) 
+	{
+		vec2 offset = vec2(iChromatic/50.,.0);
+		right.r = texture2D(iChannel2, uv+offset.xy).r;
+		right.g = texture2D(iChannel2, uv          ).g;
+		right.b = texture2D(iChannel2, uv+offset.yx).b;
+	}
+	// Trixels
+	if (iTrixels > 0.0) 
+	{
+      	right = trixels( uv, iChannel2 );
+	}
+  	// Grid
+  	if (iGridSize > 0.0) 
+  	{
+        right = grid( uv, iChannel2 );
   	}
 
 	return vec3( right.r, right.g, right.b );
 }
-
 // right main lines end
 
 // Blend functions begin
@@ -541,8 +571,11 @@ vec3 mainFunction( vec2 uv )
    vec3 c = vec3(0.0);
    switch ( iBlendmode )
    {
-   case 0: 
-      c = mix( shaderLeft(uv), shaderRight(uv), iCrossfade );
+   case 0:
+	  	c = texture(iChannel0, uv).xyz * iWeight0 +
+        texture(iChannel1, uv).xyz * iWeight1 +
+        texture(iChannel2, uv).xyz * iWeight2;
+      // c = mix( shaderLeft(uv), shaderRight(uv), iCrossfade );
       break;
    case 1: 
       c = multiply( shaderLeft(uv), shaderRight(uv) );

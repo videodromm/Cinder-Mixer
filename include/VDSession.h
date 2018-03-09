@@ -62,7 +62,9 @@ namespace VideoDromm {
 		string							getMovieFileName() { return mMovieFileName; };
 		int								getMoviePlaybackDelay() { return mMoviePlaybackDelay; };
 		bool							hasMovie() { return mMovieFileName.length() > 0; };
-		unsigned int					getFadeInDelay() { return mFadeInDelay; };
+		unsigned int					getFadeInDelay() { 
+			return mFadeInDelay; 
+		};
 		unsigned int					getFadeOutDelay() { return mFadeOutDelay; };
 		string							getImageSequencePath() { return mImageSequencePath; };
 		bool							hasImageSequencePath() { return mImageSequencePath.length() > 0; };

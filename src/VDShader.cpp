@@ -33,7 +33,7 @@ bool VDShader::loadFragmentStringFromFile(string aFileName) {
 	CI_LOG_V("loadFragmentStringFromFile, loading " + aFileName);
 
 	if (aFileName.length() == 0) {
-		mFragFile = getAssetPath("") / "mixfbo.frag";
+		mFragFile = getAssetPath("") / "mixall.frag";
 	}
 	else {
 		mFragFile = aFileName;
