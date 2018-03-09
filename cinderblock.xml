@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="Mixer"
+	id="com.videodromm.mixer"
+	author="Bruce Lane"
+	license="MIT"
+	summary="Mixer block for Cinder 0.9: utilities for Spout, OSC, WebSockets, Watchdog, Shaders, Parameters"
+	url="https://github.com/videodromm/Cinder-Mixer"
+	git="git://github.com/videodromm/Cinder-Mixer.git"
+	>
+	<supports os="msw" />
+	<requires>com.wk.websocketpp</requires>
+	<requires>org.libcinder.ndi</requires>
+	<includePath>include</includePath>
+	<includePath>src</includePath>
+	<headerPattern>include/*.h</headerPattern>
+	<sourcePattern>src/*.cpp</sourcePattern>
+	<sourcePattern>src/*.c</sourcePattern>
+	<platform os="msw">
+		<libraryPath>lib</libraryPath>
+		<requires>fr.batchass.spout</requires>
+		<requires>mb.cinder.midi2</requires>
+	</platform>
+</block>
+<template>templates/Mixer/template.xml</template>
+</cinder>
