@@ -265,7 +265,11 @@ namespace VideoDromm {
 			mVDSettings->xFadeChanged = false;
 			
 		}
-
+		//vec4 mouse = mVDAnimation->getVec4UniformValueByName("iMouse");
+		mGlslMix->uniform("iWeight0", mVDAnimation->getFloatUniformValueByIndex(35));	// weight of channel 0
+		mGlslMix->uniform("iWeight1", mVDAnimation->getFloatUniformValueByIndex(36));	// weight of channel 1
+		mGlslMix->uniform("iWeight2", mVDAnimation->getFloatUniformValueByIndex(37));	// weight of channel 2
+   
 		mGlslMix->uniform("iBlendmode", mVDSettings->iBlendmode);
 		mGlslMix->uniform("iGlobalTime", mVDAnimation->getFloatUniformValueByIndex(0));
 		// was vec3(mVDSettings->mFboWidth, mVDSettings->mFboHeight, 1.0)):
@@ -276,6 +280,7 @@ namespace VideoDromm {
 		mGlslMix->uniform("iDate", mVDAnimation->getVec4UniformValueByName("iDate"));
 		mGlslMix->uniform("iChannel0", 0);
 		mGlslMix->uniform("iChannel1", 1);
+		mGlslMix->uniform("iChannel2", 2);
 		mGlslMix->uniform("iRatio", mVDAnimation->getFloatUniformValueByIndex(11));//check if needed: +1;//mVDSettings->iRatio);
 		mGlslMix->uniform("iRenderXY", mVDSettings->mRenderXY);
 		mGlslMix->uniform("iZoom", mVDAnimation->getFloatUniformValueByIndex(12));
